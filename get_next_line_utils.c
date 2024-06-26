@@ -15,66 +15,64 @@
 #include <unistd.h>
 #define BUFFER_SIZE 42
 
-char	*get_line(char *store, char *newline)
+char	*str_bzero(size_t size)
+{
+	char	*str;
+	
+	while (size)
+		str[size--] = 0;
+	return (str);
+}
+
+int	findnewline(char *stash)
+{
+	int	i;
+
+	while (stash[i] || stash[i] != '\n')
+		i++;
+	if (stash[i] == '\n')
+		i++;
+	return (i);
+}
+
+char	*xstract(char *stash, int newline)
 {
 	char	*line;
-
-	if (!newline || !store)
-		return (store);
-	line = malloc(newline + 1 - store);
-	if (!line)
-		return(NULL);
-	while (store < newline)
-		*(line++) = *(store++);
+	
+	if(!newline)
+		newline = ft_strlen(stash); //define
+	line = malloc(newline + 1);
+	while (newline && *stash)
+	{
+		*(line++) = *(stash++)
+		newline--;
+	}
 	*line = '\0';
 	return (line);
 }
 
-char	*endofstr(char *str)
+int	ft_strlen(char *str)
 {
-	while (str && *str)
-		str++;
-	return (str);
-}
-char	*strealloc(char *oldstr, int extra_size)
-{
-	char	*newstr;
 	int	i;
 
-	if (!oldstr)
-		return (NULL);
-	newstr = oldstr;
-	while (newstr && *newstr)
-		newstr++;
-	newstr = (char *)malloc(newstr - oldstr + 1 + extra_size);
-	if (!newstr)
-		return (NULL);
-	i = 0;
-	while (*oldstr)
-		newstr[i++] = *(oldstr++);
-	while (extra_size-- >= 0)
-		newstr[i++] = '\0';
-	free(oldstr);
-	return (newstr);
+	while (str[i])
+		i++;
+	return (i);
 }
 
-/*
-t_split	split_store(store, newline)
+char	*ft_strjoin(char *str1, char *str2)
 {
-	t_split	split;
+	char	*joint;
+	int	len;
 
-	if (!newline)
-	{
-		split.line = store;
-		free(store);
-		split.store = NULL;
-	}
-	else
-	{
-		split.line = get_line(store, newline);
-		free(store);
-		split.store = strealloc(newline + 1, 0);
-	}
-	return (split);
+	len = ft_strlen(str1) + ft_strlen(str2);
+	joint = malloc(len + 1);
+	if (!joint)
+		return (NULL);
+	while (*str1)
+		*(joint++) = *(str1++);
+	while (*str2)
+		*(joint++) = *(str2++);
+	return (joint);
 }
-*/
+		

@@ -16,60 +16,29 @@
 #include <stdio.h>
 #define BUFFER_SIZE 42
 
-char	*find_new_line(char *store)
-{
-	if (!store)
-		return (NULL);
-	while (*store != '\n' && *store)
-		store++;
-	if (*store == '\n')
-		return (store + 1);
-	else
-		return (NULL);
-}
-
-char	*start(void)
-{
-	char	*str;
-
-	str = malloc(1);
-	*str = '\0';
-	return (str);
-}
-
 char	*get_next_line(int fd)
 {
-	static char	*store;
-	static int	call;
-	char	*newline;
+	static char	stash[BUFFER_SIZE + 1];
 	char	*line;
-	int	read_out;
+	int	newline;
 
-	printf("[Function call %d] ", call++);
-	if (fd < 0 || BUFFER_SIZE < 0)
-		return (NULL);
-	if (!store)
+	if (stash[BUFFER_SIZE] != 0)
+		stash = str_bzero(BUFFER_SIZE + 1); //done
+	newline = findnewline(stash); //done
+	if (newline)
 	{
-		printf("C0 ");
-		store = start();
+		line = xstract(stash, newline); //done
+		stash = stash[newline];
 	}
-	newline = find_new_line(store);
-	if (!newline)
+	else
 	{
-		printf("C1 ");
-		store = strealloc(store, BUFFER_SIZE);
-		read_out = read(fd, endofstr(store), BUFFER_SIZE);
-		printf("C2-%02d ", read_out);
+		line = xstract(stash[newline + 1], 0);
+		read_out = read(fd, stash, BUFFER_SIZE);
 		if (read_out < 0)
-			return (free(store), NULL);
-		else if (read_out > 0)
-			get_next_line(fd);
+			return (NULL);
+		if (read_out > 0)
+			return (strjoin(line, get_next_line(fd)); //done	
 	}
-	// Isto n pode tar aqui, o recursivo n para aqui bro
-	printf("C3 %s", store);
-	line = get_line(store, newline);
-	free(store);
-	store = strealloc(newline, 0);
 	return (line);
 }
 
