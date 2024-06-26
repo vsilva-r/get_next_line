@@ -18,12 +18,17 @@
 #  define BUFFER_SIZE 42
 # endif
 
+typedef struct s_stash
+{
+	char	buffer[BUFFER_SIZE + 1];
+	int	newline;
+}		t_stash;
+
 char	*get_next_line(int fd);
-char	*str_bzero(size_t size);
+void	gnl_bzero(char *str, size_t size);
 int	findnewline(char *stash);
 char	*xstract(char *stash, int newline);
-int	ft_strlen(char *str);
-char	*ft_strjoin(char *str1, char *str2);
+char	*gnl_strjoin(char *str1, char *str2);
 /*
 char	*get_line(char *store, char *newline);
 char	*strealloc(char *oldstr, int extra_size);
