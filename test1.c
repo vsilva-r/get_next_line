@@ -22,10 +22,10 @@ int main()
 	free(line);*/
 	
 	
-	while (i++ < 3)
+	while (i++ < 20)
 	{
 		line = get_next_line(file1);
-		printf("Iteration %2d/20: %s\n", i, line);
+		printf("\033[1;31mIteration\033[1;0m %2d/20: %s\n", i, line);
 		free(line);
 	}
 	

@@ -13,6 +13,7 @@
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 # include <unistd.h>
+# include "ft_printf/ft_printf.h"
 # include <stdlib.h>
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
@@ -24,15 +25,12 @@ typedef struct s_stash
 	int	newline;
 }		t_stash;
 
+
 char	*get_next_line(int fd);
 void	gnl_bzero(char *str, size_t size);
-int	findnewline(char *stash);
-char	*xstract(char *stash, int newline);
+void	findnewline(t_stash *stash);
+char	*xstract(char *buffer, int newline);
+size_t	ft_strlen(const char *s);
 char	*gnl_strjoin(char *str1, char *str2);
-/*
-char	*get_line(char *store, char *newline);
-char	*strealloc(char *oldstr, int extra_size);
-char	*endofstr(char *str);
-*/
 
 #endif

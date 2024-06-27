@@ -23,37 +23,37 @@ char	*get_next_line(int fd)
 	int	read_out;
 
 	//printf("Entered \033[1;32mGET_NEXT_LINE\033[1;0m\n");
+	//printf("Buffer is \"%s\"\n", stash.buffer);
+	//printf("Newline is %d\n", stash.newline);
 	if (stash.buffer[BUFFER_SIZE] != 0){
 		//printf("Checkpoint NOBUF");
 		gnl_bzero(stash.buffer, BUFFER_SIZE + 1); //done
 	}
-	if (stash.buffer[stash.newline - 1] == '\n')
-	{
-		line = xstract((stash.buffer + stash.newline), 0);
-		gnl_bzero(stash.buffer, stash.newline);
+	if (stash.newline % (BUFFER_SIZE + 1)){
+		//printf("Entered \033[1;33mIF\033[1;0m\n");
+		line = xstract(stash.buffer, stash.newline);
 	}
-	//printf("Stash is %s\n", stash.buffer);
-	stash.newline = findnewline(stash.buffer); //done
-	//printf("Newline is %d\n", stash.newline);
-	if (stash.buffer[stash.newline - 1] == '\n') {
-	//	printf ("Entered \033[1;33mIF\033[1;0m: char at newline is %c\n", stash.buffer[stash.newline - 1]);
-		line = xstract(stash.buffer, stash.newline); //done
-		}
 	else
 	{
-		//printf("Entered \033[1;33mELSE\033[1;0m: char at newline is %c\n", stash.buffer[stash.newline - 1]);
-		line = xstract(stash.buffer, stash.newline);
-		//printf("Reading... ");
+		//printf("Entered \033[1;33mELSE\033[1;0m\n");
+		findnewline(&stash);
+		line = xstract((stash.buffer + stash.newline), 0);
 		read_out = read(fd, stash.buffer, BUFFER_SIZE);
-		//printf("Read_out is %d\n", read_out);
+		//printf("\033[1;33mRead\033[1;0m %d:\t\"%s\"\n", read_out, stash.buffer);
 		if (read_out < 0)
 			return (free(line), NULL);
-		if (read_out > 0) {
-		//	printf("Recursively ");
-			line = gnl_strjoin(line, get_next_line(fd)); //done	
+		else if (read_out > 0)
+		{
+			findnewline(&stash);
+			return (gnl_strjoin(line, get_next_line(fd)));
+		}
+		else {
+			gnl_bzero(stash.buffer, BUFFER_SIZE + 1);
+			//printf("\033[1;33mBZERO\033[1;0m: Stash is \"%s\"\n", stash.buffer);
 		}
 	}
-	//printf("Exiting \033[1;31mGET_NEXT_LINE\033[1;0m, line is %s\n", line);
+	stash.newline = 0;
+	//printf("Exiting \033[1;31mGET_NEXT_LINE\033[1;0m\n");
 	return (line);
 }
 
