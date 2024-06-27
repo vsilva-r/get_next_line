@@ -38,6 +38,7 @@ char	*get_next_line(int fd)
 		//printf("Entered \033[1;33mELSE\033[1;0m\n");
 		findnewline(&stash);
 		line = xstract((stash.buffer + stash.newline), 0);
+		gnl_bzero(stash.buffer, BUFFER_SIZE);
 		read_out = read(fd, stash.buffer, BUFFER_SIZE);
 		//printf("\033[1;33mRead\033[1;0m %d:\t\"%s\"\n", read_out, stash.buffer);
 		if (read_out < 0)
@@ -46,10 +47,6 @@ char	*get_next_line(int fd)
 		{
 			findnewline(&stash);
 			return (gnl_strjoin(line, get_next_line(fd)));
-		}
-		else {
-			gnl_bzero(stash.buffer, BUFFER_SIZE + 1);
-			//printf("\033[1;33mBZERO\033[1;0m: Stash is \"%s\"\n", stash.buffer);
 		}
 	}
 	stash.newline = 0;

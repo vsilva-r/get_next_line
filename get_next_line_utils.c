@@ -27,15 +27,13 @@ void	gnl_bzero(char *str, size_t size)
 void	findnewline(t_stash *stash)
 {
 	int	i;
+	int	flag;
 
 	////printf("Entered \033[1;32mFIND\033[1;0m\n");
-	
 	i = 0;
-	if (!stash->buffer[0])
-		return ;
 	while (((stash->buffer)[i] != 0) && ((stash->buffer)[i] != '\n'))
 		i++;
-	stash->newline = ++i % (BUFFER_SIZE + 1);
+	stash->newline = (i + 1) * (stash->buffer[i] != 0);
 	//printf("\033[1;33mFIND\033[1;0m:\tNewline is %d\n", stash->newline);
 	////printf("Exiting \033[1;31mFIND\033[1;0m\n");
 }
@@ -99,8 +97,8 @@ char	*gnl_strjoin(char *str1, char *str2)
 	char	*joint;
 	size_t	len;
 
-	//printf("Entered \033[1;32mSTRJOIN\033[1;0m:\tstr1 is \"%s\"\n", str1);
-	//printf("\t\t\tstr2 is \"%s\"\n", str2);
+	//printf("Entered \033[1;32mSTRJOIN\033[1;0m:\n\tstr1 is \"%s\"\n", str1);
+	//printf("\tstr2 is \"%s\"\n", str2);
 	len = ft_strlen(str1) + ft_strlen(str2);
 	joint = malloc(len + 2);
 	if (!joint)
@@ -120,8 +118,7 @@ char	*gnl_strjoin(char *str1, char *str2)
 		joint[i + j] = str2[j];
 		j++;
 	}
-	joint[i + j + 1] = 'X';
-	joint[i + j + 2] = '\0';
+	joint[i + j] = '\0';
 	//free(str2);
 	//printf("Str_joint is \"%s\"\n", joint);
 	//printf("Exiting \033[1;31mSTRJOIN\033[1;0m\n");
