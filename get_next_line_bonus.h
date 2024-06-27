@@ -15,7 +15,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 255
+#  define BUFFER_SIZE 42
 # endif
 
 typedef struct s_stash

@@ -13,6 +13,9 @@
 #include "get_next_line.h"
 #include <stdlib.h>
 #include <unistd.h>
+#define BUFFER_SIZE 42
+
+
 #include <stdio.h>
 
 void	gnl_bzero(char *str, size_t size)

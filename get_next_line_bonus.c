@@ -14,41 +14,42 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#define BUFFER_SIZE 10
 
 char	*get_next_line(int fd)
 {
-	static t_stash	stash;
+	static t_stash	stash[_SC_OPEN_MAX];
 	char	*line;
 	int	read_out;
 
 	//printf("Entered \033[1;32mGET_NEXT_LINE\033[1;0m\n");
-	//printf("Buffer is \"%s\"\n", stash.buffer);
-	//printf("Newline is %d\n", stash.newline);
-	if (stash.buffer[BUFFER_SIZE] != 0){
+	//printf("Buffer is \"%s\"\n", stash[fd].buffer);
+	//printf("Newline is %d\n", stash[fd].newline);
+	if (stash[fd].buffer[BUFFER_SIZE] != 0){
 		//printf("Checkpoint NOBUF");
-		gnl_bzero(stash.buffer, BUFFER_SIZE + 1); //done
+		gnl_bzero(stash[fd].buffer, BUFFER_SIZE + 1); //done
 	}
-	if (stash.newline % (BUFFER_SIZE + 1)){
+	if (stash[fd].newline % (BUFFER_SIZE + 1)){
 		//printf("Entered \033[1;33mIF\033[1;0m\n");
-		line = xstract(stash.buffer, stash.newline);
+		line = xstract(stash[fd].buffer, stash[fd].newline);
 	}
 	else
 	{
 		//printf("Entered \033[1;33mELSE\033[1;0m\n");
-		findnewline(&stash);
-		line = xstract((stash.buffer + stash.newline), 0);
-		gnl_bzero(stash.buffer, BUFFER_SIZE);
-		read_out = read(fd, stash.buffer, BUFFER_SIZE);
-		//printf("\033[1;33mRead\033[1;0m %d:\t\"%s\"\n", read_out, stash.buffer);
+		findnewline(&(stash[fd]));
+		line = xstract((stash[fd].buffer + stash[fd].newline), 0);
+		gnl_bzero(stash[fd].buffer, BUFFER_SIZE);
+		read_out = read(fd, stash[fd].buffer, BUFFER_SIZE);
+		//printf("\033[1;33mRead\033[1;0m %d:\t\"%s\"\n", read_out, stash[fd].buffer);
 		if (read_out < 0)
 			return (free(line), NULL);
 		else if (read_out > 0)
 		{
-			findnewline(&stash);
+			findnewline(&(stash[fd]));
 			return (gnl_strjoin(line, get_next_line(fd)));
 		}
 	}
-	stash.newline = 0;
+	stash[fd].newline = 0;
 	//printf("Exiting \033[1;31mGET_NEXT_LINE\033[1;0m\n");
 	return (line);
 }

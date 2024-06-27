@@ -12,7 +12,7 @@ int main()
 	char	*line;
 
 	
-	file1 = open("test1.txt", O_RDONLY);
+	file1 = open("test2.txt", O_RDONLY);
 
 	i = printf("File opened with fd = %d\n", file1);
 	printf("What the fuck? %d\n", i);
