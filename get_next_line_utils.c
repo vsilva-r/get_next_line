@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#define NEWLINE_INDEX_ (stash->buffer)[stash->newline + i]
 
 void	gnl_bzero(char *str, size_t size)
 {	
@@ -21,33 +22,33 @@ void	gnl_bzero(char *str, size_t size)
 		str[--size] = 0;
 }
 
-void	findnewline(t_stash *stash)
+int	findnewline(t_stash *stash)
 {
 	int	i;
-	int	flag;
 
-	////printf("Entered \033[1;32mFIND\033[1;0m\n");
 	i = 0;
-	while (((stash->buffer)[i] != 0) && ((stash->buffer)[i] != '\n'))
+	while ((NEWLINE_INDEX_ != 0) && (NEWLINE_INDEX_ != '\n'))
 		i++;
-	stash->newline = (i + 1) * (stash->buffer[i] != 0);
-	//printf("\033[1;33mFIND\033[1;0m:\tNewline is %d\n", stash->newline);
+	stash->newline += i;
+	stash->newline %= BUFFER_SIZE + 1;	/* ! */
+	return (i);
+	//printf("\033[1;33mFIND\033[1;0m:\tNewline is %d\n", s->newline);
 	////printf("Exiting \033[1;31mFIND\033[1;0m\n");
 }
 
-char	*xstract(char *buffer, int newline)
+char	*xstract(t_stash *stash)
 {
 	char	*line;
 	int	i;
+	int	size;
 
 	////printf("Entered \033[1;32mXSTRACT\033[1;0m\n");
-	if (!newline)
-		newline = ft_strlen(buffer);
-	line = malloc(newline + 1);
+	size = findnewline(stash);
+	line = malloc(size + 1);
 	i = 0;
-	while (i < newline && buffer[i])
+	while (i < size && stash->buffer[i])
 	{
-		line[i] = buffer[i];
+		line[i] = stash->buffer[i];
 		i++;
 	}
 	line[i] = '\0';
@@ -121,4 +122,3 @@ char	*gnl_strjoin(char *str1, char *str2)
 	//printf("Exiting \033[1;31mSTRJOIN\033[1;0m\n");
 	return (joint);
 }
-		
