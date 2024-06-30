@@ -10,13 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <stdlib.h>
 #include <unistd.h>
-#define BUFFER_SIZE 42
-
-
 #include <stdio.h>
+#define NEWLINE_INDEX_(x) (stash->buffer)[stash->newline + x]
 
 void	gnl_bzero(char *str, size_t size)
 {	
@@ -24,38 +22,35 @@ void	gnl_bzero(char *str, size_t size)
 		str[--size] = 0;
 }
 
-void	findnewline(t_stash *stash)
+int	findnewline(t_stash *stash)
 {
 	int	i;
-	int	flag;
 
-	////printf("Entered \033[1;32mFIND\033[1;0m\n");
 	i = 0;
-	while (((stash->buffer)[i] != 0) && ((stash->buffer)[i] != '\n'))
+	while ((NEWLINE_INDEX_(i) != 0) && (NEWLINE_INDEX_(i) != '\n'))
 		i++;
-	stash->newline = (i + 1) * (stash->buffer[i] != 0);
-	//printf("\033[1;33mFIND\033[1;0m:\tNewline is %d\n", stash->newline);
-	////printf("Exiting \033[1;31mFIND\033[1;0m\n");
+	//printf("\033[1;33mFIND\033[1;0m:\tNewline add %d\n", i);
+	return (i);
 }
 
-char	*xstract(char *buffer, int newline)
+char	*xstract(t_stash *stash)
 {
 	char	*line;
 	int	i;
+	int	size;
 
-	////printf("Entered \033[1;32mXSTRACT\033[1;0m\n");
-	if (!newline)
-		newline = ft_strlen(buffer);
-	line = malloc(newline + 1);
+	size = findnewline(stash);
+	line = malloc(size + 1);
 	i = 0;
-	while (i < newline && buffer[i])
+	while (i < size && NEWLINE_INDEX_(i))
 	{
-		line[i] = buffer[i];
+		line[i] = NEWLINE_INDEX_(i);
 		i++;
 	}
 	line[i] = '\0';
+	stash->newline = (stash->newline + size) % BUFFER_SIZE; /* ! */
+	// (stash->newline += size) %= BUFFER_SIZE;
 	//printf("\033[1;33mXSTRACT\033[1;0m: Extracted \"%s\"\n", line);
-	////printf("Exiting \033[1;31mXSTRACT\033[1;0m\n");
 	return (line);
 }
 
@@ -66,15 +61,15 @@ char	*xstract(char *buffer, int newline)
 	if(!newline)
 		newline = findnewline(buffer); //done
 	line = malloc(newline + 1);
-	////printf("Line %s\n", line);
+	//printf("Line %s\n", line);
 	while (newline && *buffer)
 	{
 		*(line++) = *(buffer++);
 		newline--;
 	}
-	////printf("Line %s\n", line);
+	//printf("Line %s\n", line);
 	*line = '\0';
-	////printf("Line %s\n", line);
+	//printf("Line %s\n", line);
 	return (line);
 }*/
 
@@ -97,31 +92,24 @@ char	*gnl_strjoin(char *str1, char *str2)
 	char	*joint;
 	size_t	len;
 
-	//printf("Entered \033[1;32mSTRJOIN\033[1;0m:\n\tstr1 is \"%s\"\n", str1);
-	//printf("\tstr2 is \"%s\"\n", str2);
 	len = ft_strlen(str1) + ft_strlen(str2);
-	joint = malloc(len + 2);
+	joint = malloc(len + 1);
 	if (!joint)
 		return (NULL);
 	i = 0;
 	while (str1[i])
 	{
-		////printf("entrou1: %c\n", str1[i]);
 		joint[i] = str1[i];
 		i++;
 	}
-	//free(str1);
+	free(str1);
 	j = 0;
 	while (str2[j])
 	{
-		////printf("entrou2: %c\n", str2[j]);
 		joint[i + j] = str2[j];
 		j++;
 	}
 	joint[i + j] = '\0';
-	//free(str2);
-	//printf("Str_joint is \"%s\"\n", joint);
-	//printf("Exiting \033[1;31mSTRJOIN\033[1;0m\n");
+	free(str2);
 	return (joint);
 }
-		
