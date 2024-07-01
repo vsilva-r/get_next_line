@@ -14,6 +14,7 @@ int main()
 
 	fd1 = open("test4.txt", O_RDONLY);
 	i = 0;
+	line = "";
 	while (line || (i > 100))
 	{
 		line = get_next_line(fd1);

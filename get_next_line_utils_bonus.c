@@ -55,6 +55,8 @@ char	*xstract(t_stash *stash)
 	int	size;
 
 	size = findnewline(stash);
+	if (!size)
+		return (NULL);
 	line = malloc(size + FLAG_(size) + 1);
 	if (!line)
 		return (NULL);
@@ -97,6 +99,10 @@ char	*gnl_strjoin(char *str1, char *str2)
 	char	*joint;
 	int	len;
 
+	if (!str1)
+		return (str2);
+	if (!str2)
+		return (str1);
 	len = gnl_strlen(str1) + gnl_strlen(str2);
 	joint = malloc(len + 1);
 	if (!joint)
