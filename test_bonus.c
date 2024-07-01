@@ -18,15 +18,15 @@ int main()
 	while (i < 20)
 	{
 		line = get_next_line(files[i % 3]);
+		printf("\033[1;31mLOREM\033[1;0m\t%2d/20: %s\n", i++, line);
+		free(line);
+
+		line = get_next_line(files[i % 3]);
 		printf("\033[1;31mREGIO\033[1;0m\t%2d/20: %s\n", i++, line);
 		free(line);
 
 		line = get_next_line(files[i % 3]);
 		printf("\033[1;31mLIANOR\033[1;0m\t%2d/20: %s\n", i++, line);
-		free(line);
-
-		line = get_next_line(files[i % 3]);
-		printf("\033[1;31mLOREM\033[1;0m\t%2d/20: %s\n", i++, line);
 		free(line);
 	}
 	
