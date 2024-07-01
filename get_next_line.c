@@ -14,6 +14,10 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#ifndef NEWLINE_INDEX
+# define NEWLINE_INDEX(x) ((stash.buffer)[stash.newline + x])
+# define FLAG(x) (NEWLINE_INDEX(x) == '\n')
+#endif 
 
 char	*get_next_line(int fd)
 {
@@ -24,25 +28,24 @@ char	*get_next_line(int fd)
 	//printf("Entered \033[1;32mGET_NEXT_LINE\033[1;0m\n");
 	if (stash.buffer[BUFFER_SIZE] != 0){
 		//printf("Checkpoint NOBUF");
-		gnl_bzero(stash.buffer, BUFFER_SIZE + 1); //done
+		gnl_bzero(&stash, BUFFER_SIZE + 1); //done
 	}
 	//printf("Buffer is \"%s\"\n", stash.buffer);
 	//printf("Newline is %d\n", stash.newline);
 	line = xstract(&stash);
-	if (stash.newline)
-		stash.newline = (stash.newline + 1);
-	else
+	if (!NEWLINE_INDEX(0))
 	{
-		//printf("Entered \033[1;33mELSE\033[1;0m\n");
-		gnl_bzero(stash.buffer, BUFFER_SIZE);
+		//printf("Entered \033[1;33mREAD with newline at %d, index '%c'\033[1;0m\n", stash.newline, NEWLINE_INDEX(0));
+		gnl_bzero(&stash, BUFFER_SIZE);
 		read_out = read(fd, stash.buffer, BUFFER_SIZE);
-		//printf("\033[1;33mRead\033[1;0m %d: Read\t\"%s\"\n", read_out, stash.buffer);
+		////printf("\033[1;33mRead\033[1;0m %d: Read\t\"%s\"\n", read_out, stash.buffer);
 		if (read_out < 0)
 			return (free(line), NULL);
 		else if (read_out > 0)
 			return (gnl_strjoin(line, get_next_line(fd)));
 	}
-	//printf("Exiting \033[1;31mGET_NEXT_LINE\033[1;0m\n");
+	stash.newline = (stash.newline + 1) % (BUFFER_SIZE + 1);
+	//printf("Exiting \033[1;31mGET_NEXT_LINE with newline at %d, index '%c'\033[1;0m\n", stash.newline, NEWLINE_INDEX(0));
 	return (line);
 }
 

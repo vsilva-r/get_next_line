@@ -26,7 +26,7 @@ typedef struct s_stash
 
 
 char	*get_next_line(int fd);
-void	gnl_bzero(char *str, size_t size);
+void	gnl_bzero(t_stash *stash, size_t size);
 int	findnewline(t_stash *stash);
 char	*xstract(t_stash *stash);
 size_t	ft_strlen(const char *s);
