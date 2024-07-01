@@ -3,31 +3,23 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdio.h>
+#define BUFFER_SIZE 10
 
 int main()
 {
 	
-	int	file1;
+	int	fd1;
 	int	i = 0;
 	char	*line;
 
-	
-	file1 = open("test3.txt", O_RDONLY);
-
-	i = printf("File opened with fd = %d\n", file1);
-	//printf("What the fuck? %d\n", i);
+	fd1 = open("test4.txt", O_RDONLY);
 	i = 0;
-	/*line = get_next_line(file1);
-	printf("Iteration %2d/20: %s\n", i, line);
-	free(line);*/
-	
-	
-	while (i++ < 30)
+	while (line || (i > 100))
 	{
-		line = get_next_line(file1);
-		printf("\033[1;31mIteration\033[1;0m %2d/20: %s\n", i, line);
+		line = get_next_line(fd1);
+		printf("%d: %s", fd1, line);
 		free(line);
+		i++;
 	}
-	
-	close(file1);
+	close(fd1);
 }

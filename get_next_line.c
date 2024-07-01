@@ -46,6 +46,8 @@ char	*get_next_line(int fd)
 	}
 	stash.newline = (stash.newline + 1) % (BUFFER_SIZE + 1);
 	//printf("Exiting \033[1;31mGET_NEXT_LINE with newline at %d, index '%c'\033[1;0m\n", stash.newline, NEWLINE_INDEX(0));
+	if (!(line[0]))
+		line = (free(line), NULL);
 	return (line);
 }
 

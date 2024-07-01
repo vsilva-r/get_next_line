@@ -8,26 +8,26 @@ int main()
 {
 	int	files[3];
 	int	i = 0;
-	char	*line;
+	char	*lines[3];
 
 	
-	files[0] = open("test1.txt", O_RDONLY);
+	files[0] = open("test4.txt", O_RDONLY);
 	files[1] = open("test2.txt", O_RDONLY);
 	files[2] = open("test3.txt", O_RDONLY);
 	
-	while (i < 20)
+	while ((i < 30))
 	{
-		line = get_next_line(files[i % 3]);
-		printf("\033[1;31mLOREM\033[1;0m\t%2d/20: %s\n", i++, line);
-		free(line);
+		lines[i % 3] = get_next_line(files[i % 3]);
+		printf("\033[1;31m%d\033[1;0m: %s", files[i % 3], lines[i % 3]);
+		free(lines[i++ % 3]);
 
-		line = get_next_line(files[i % 3]);
-		printf("\033[1;31mREGIO\033[1;0m\t%2d/20: %s\n", i++, line);
-		free(line);
+		lines[i % 3] = get_next_line(files[i % 3]);
+		printf("\033[1;31m%d\033[1;0m: %s", files[i++ % 3], lines[i % 3]);
+		free(lines[i++ % 3]);
 
-		line = get_next_line(files[i % 3]);
-		printf("\033[1;31mLIANOR\033[1;0m\t%2d/20: %s\n", i++, line);
-		free(line);
+		lines[i % 3] = get_next_line(files[i % 3]);
+		printf("\033[1;31m%d\033[1;0m: %s\n", files[i++ % 3], lines[i % 3]);
+		free(lines[i++ % 3]);
 	}
 	
 	close(files[0]);
