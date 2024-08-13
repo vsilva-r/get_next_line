@@ -33,7 +33,6 @@ int	gnl_strlen(const char *s)
 	i = 0;
 	while ((s[i] != 0) && (s[i] != '\n'))
 		i++;
-	////printf("\033[1;33mFIND\033[1;0m:\tNewline add %d\n", i);
 	return (i + (s[i] == '\n'));
 }
 
@@ -44,7 +43,6 @@ int	findnewline(t_stash *stash)
 	i = 0;
 	while ((NEWLINE_INDEX_(i) != 0) && (NEWLINE_INDEX_(i) != '\n'))
 		i++;
-	//printf("\033[1;33mFIND\033[1;0m:\tNewline add %d\n", i);
 	return (i);
 }
 
@@ -67,30 +65,9 @@ char	*xstract(t_stash *stash)
 		i++;
 	}
 	line[i] = '\0';
-	stash->newline = (stash->newline + size); /* ! */
-	// (stash->newline += size) %= BUFFER_SIZE;
-	//printf("\033[1;33mXSTRACT\033[1;0m: Extracted \"%s\"\n", line);
+	stash->newline = (stash->newline + size);
 	return (line);
 }
-
-/*char	*xstract(char *buffer, int newline)
-{
-	char	*line;
-	
-	if(!newline)
-		newline = findnewline(buffer); //done
-	line = malloc(newline + 1);
-	//printf("Line %s\n", line);
-	while (newline && *buffer)
-	{
-		*(line++) = *(buffer++);
-		newline--;
-	}
-	//printf("Line %s\n", line);
-	*line = '\0';
-	//printf("Line %s\n", line);
-	return (line);
-}*/
 
 char	*gnl_strjoin(char *str1, char *str2)
 {
@@ -113,7 +90,6 @@ char	*gnl_strjoin(char *str1, char *str2)
 		joint[i] = str1[i];
 		i++;
 	}
-	//printf("Joined \"%s\"", str1);
 	free(str1);
 	j = 0;
 	while (str2[j])
@@ -122,7 +98,6 @@ char	*gnl_strjoin(char *str1, char *str2)
 		j++;
 	}
 	joint[i + j] = '\0';
-	//printf(" with \"%s\"\n", str2);
 	free(str2);
 	return (joint);
 }
