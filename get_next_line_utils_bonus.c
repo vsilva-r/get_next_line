@@ -55,7 +55,7 @@ char	*xstract(t_stash *stash)
 	int	size;
 
 	size = findnewline(stash);
-	if (!size)
+	if (size + FLAG_(size) == 0)
 		return (NULL);
 	line = malloc(size + FLAG_(size) + 1);
 	if (!line)

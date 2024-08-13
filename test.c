@@ -3,7 +3,9 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdio.h>
-#define BUFFER_SIZE 10
+#ifndef BUFFER_SIZE
+# define BUFFER_SIZE 10
+#endif
 
 int main()
 {
@@ -18,7 +20,7 @@ int main()
 	while (line || (i > 100))
 	{
 		line = get_next_line(fd1);
-		printf("%d: %s", fd1, line);
+		printf("\033[1;31m%d\033[1;0m: %s", fd1, line);
 		free(line);
 		i++;
 	}

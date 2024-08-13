@@ -17,6 +17,7 @@
 #ifndef NEWLINE_INDEX_
 # define NEWLINE_INDEX_(x) ((stash->buffer)[stash->newline + x])
 # define FLAG_(x) (NEWLINE_INDEX_(x) == '\n')
+# define SIZE_FLAG size + FLAG_(size)
 #endif 
 
 void	gnl_bzero(t_stash *stash, size_t size)
@@ -55,7 +56,7 @@ char	*xstract(t_stash *stash)
 	int	size;
 
 	size = findnewline(stash);
-	if (!size)
+	if (size + FLAG_(size) == 0)
 		return (NULL);
 	line = malloc(size + FLAG_(size) + 1);
 	if (!line)

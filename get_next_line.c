@@ -26,6 +26,8 @@ char	*get_next_line(int fd)
 	int	read_out;
 
 	//printf("Entered \033[1;32mGET_NEXT_LINE\033[1;0m\n");
+	if (BUFFER_SIZE < 1)
+		return (NULL);
 	if (stash.buffer[BUFFER_SIZE] != 0){
 		//printf("Checkpoint NOBUF");
 		gnl_bzero(&stash, BUFFER_SIZE + 1); //done
