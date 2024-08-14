@@ -14,10 +14,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#ifndef NEWLINE_INDEX
-# define NEWLINE_INDEX(x) ((stash.buffer)[stash.newline + x])
-# define FLAG(x) (NEWLINE_INDEX(x) == '\n')
-#endif 
 
 /* 	So how does this work? LOL
 	1. It starts by xtracting whatever is on the current stash buffer,
@@ -36,15 +32,15 @@
 char	*get_next_line(int fd)
 {
 	static t_stash	stash;
-	char	*line;
-	int	read_out;
+	char			*line;
+	int				read_out;
 
 	if (BUFFER_SIZE < 1)
 		return (NULL);
 	if (stash.buffer[BUFFER_SIZE] != 0)
 		gnl_bzero(&stash, BUFFER_SIZE + 1);
 	line = xstract(&stash);
-	if (!NEWLINE_INDEX(0))
+	if (!((stash.buffer)[stash.newline]))
 	{
 		gnl_bzero(&stash, BUFFER_SIZE);
 		read_out = read(fd, stash.buffer, BUFFER_SIZE);

@@ -14,24 +14,19 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#ifndef NEWLINE_INDEX
-# define NEWLINE_INDEX(x) ((stash[fd].buffer)[stash[fd].newline + x])
-# define FLAG(x) (NEWLINE_INDEX(x) == '\n')
-#endif 
 
 char	*get_next_line(int fd)
 {
 	static t_stash	stash[_SC_OPEN_MAX];
-	char	*line;
-	int	read_out;
+	char			*line;
+	int				read_out;
 
 	if (BUFFER_SIZE < 1)
 		return (NULL);
-	if (stash[fd].buffer[BUFFER_SIZE] != 0){
+	if (stash[fd].buffer[BUFFER_SIZE] != 0)
 		gnl_bzero(&stash[fd], BUFFER_SIZE + 1);
-	}
 	line = xstract(&stash[fd]);
-	if (!NEWLINE_INDEX(0))
+	if (!((stash[fd].buffer)[stash[fd].newline]))
 	{
 		gnl_bzero(&stash[fd], BUFFER_SIZE);
 		read_out = read(fd, stash[fd].buffer, BUFFER_SIZE);
